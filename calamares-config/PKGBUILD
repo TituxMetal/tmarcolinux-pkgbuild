@@ -1,0 +1,36 @@
+# Maintainer: Titux Metal <tmarcolinux@lgdweb.fr>
+# Co-Maintainer: Erik Dubois <erik.dubois@gmail.com>
+
+pkgname=tmarcolinux-calamares-git
+_pkgname=tmarcolinux-calamares
+_destname="/etc/calamares"
+_licensedir="/usr/share/licenses/${pkgname}/"
+pkgver=r3.b2e3e17
+pkgrel=1
+pkgdesc="Calamares config files for tmarcolinux"
+arch=('x86_64')
+url="https://github.com/TituxMetal/${_pkgname}"
+license=('GPL3')
+depends=()
+makedepends=('git')
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+source=(${_pkgname}::"git+https://github.com/TituxMetal/${_pkgname}.git")
+install='readme.install'
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$_pkgname"
+  ( set -o pipefail
+    git describe --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+
+package() {
+  install -dm755 ${pkgdir}${_licensedir}${_pkgname}
+	install -m644  ${srcdir}/${_pkgname}/LICENSE.md ${pkgdir}${_licensedir}
+
+  install -dm755 ${pkgdir}${_destname}
+	cp -r  ${srcdir}/${_pkgname}/calamares/* ${pkgdir}${_destname}
+}
