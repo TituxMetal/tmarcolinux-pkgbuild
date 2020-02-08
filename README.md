@@ -5,3 +5,4 @@ PKGBUILD files for building packages for Titux Metal ArcoLinux Distribution
 
 - Add calamares-config folder
 - Add i3wm-config folder
+- Add dotfiles folder
