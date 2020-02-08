@@ -1,4 +1,4 @@
-# i3wm Config
+# Dotfiles
 PKGBUILD for building tmarcolinux-dotfiles-git package
 
 # Build the package
