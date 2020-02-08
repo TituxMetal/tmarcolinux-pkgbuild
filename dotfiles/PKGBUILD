@@ -1,0 +1,34 @@
+# Maintainer: Titux Metal <tmarcolinux@lgdweb.fr>
+
+pkgname=tmarcolinux-dotfiles-git
+_pkgname=tmarcolinux-dotfiles
+_destname="/etc/"
+_licensedir="/usr/share/licenses/${pkgname}/"
+pkgver=r20.6dbb44b
+pkgrel=1
+pkgdesc="Custom configuration files for Titux Metal ArcoLinux Distribution"
+arch=('x86_64')
+url="https://github.com/TituxMetal/${_pkgname}"
+license=('GPL3')
+makedepends=('git')
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+source=(${_pkgname}::"git+https://github.com/TituxMetal/${_pkgname}.git")
+install='readme.install'
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$_pkgname"
+  ( set -o pipefail
+    git describe --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+
+package() {
+  install -dm755 ${pkgdir}${_licensedir}${_pkgname}
+  install -m644  ${srcdir}/${_pkgname}/LICENSE.md ${pkgdir}${_licensedir}
+
+  install -dm755 ${pkgdir}${_destname}
+  cp -r  ${srcdir}/${_pkgname}/skel ${pkgdir}${_destname}
+}
